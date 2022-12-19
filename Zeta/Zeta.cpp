@@ -190,19 +190,34 @@ mpf_class NPioverL(mpz_class l, int power)
 
 
 
-int main()
+int main(int argc, char** argv)
 {
     using std::cout;
     using std::endl;
 
-
-    size_t L = std::pow(10,7);
-
-    mpz_class L_(std::to_string(L));
+    int power;
+    mpz_class L_;
+    size_t L;
+    if (argc != 3)
+    {
+        L = std::pow(10, 7);
+        L_ = std::to_string(L);
+        power = 2;
+    }
+    else {
+        std::string L_str = argv[1];
+        L_ = L_str;
+        L = std::stoul(L_str);
+        std::string power_str = argv[2];
+        power = std::stoi(power_str);
+    }
 
     std::chrono::time_point<std::chrono::steady_clock> primestart = std::chrono::steady_clock::now();
 
 
+
+    cout << "L= " << L_ << endl;
+    cout << "power= " << power << endl;
     primeList = generatePrimes(L+1000);
     std::cout << "length of primeList: " << primeList.size() << std::endl;
     std::chrono::time_point<std::chrono::steady_clock> primeend = std::chrono::steady_clock::now();
@@ -211,7 +226,7 @@ int main()
 
 
     std::chrono::time_point<std::chrono::steady_clock> start = std::chrono::steady_clock::now();
-    mpf_class result = NPioverL(L_, 2);
+    mpf_class result = NPioverL(L_, power);
     cout << endl;
     cout << "result: " << std::setprecision(15) << result << endl;
 
