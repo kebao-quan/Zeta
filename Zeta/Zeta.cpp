@@ -128,7 +128,7 @@ mpz_class N(mpz_class l, int power)
 {
     short maxterm = 15;
     if (l <= pow(10, 10))
-        maxterm = 12;
+        maxterm = 11;
     if (l <= pow(10, 9))
         maxterm = 11;
     if (l <= pow(10, 8))
