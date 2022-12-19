@@ -18,22 +18,25 @@ mpf_class pi(3.14159265358979323846264338327950288419716939937510582097494459230
 
 
 
-std::vector<uint64_t> generatePrimes(size_t max)
+std::vector<mpz_class> generatePrimes(size_t max)
 {
-    std::vector<uint64_t> primeList;
+    std::vector<mpz_class> primeList;
 
     primesieve::iterator it;
     uint64_t prime = it.next_prime();
 
     for (; prime < max; prime = it.next_prime())
-        primeList.push_back(prime);
+    {
+        mpz_class tmp(std::to_string(prime));
+        primeList.push_back(tmp);
+    }
 
 
     return primeList;
 }
 //
 //
-std::vector<uint64_t> primeList;
+std::vector<mpz_class> primeList;
 //
 //
 //
@@ -47,8 +50,7 @@ mpz_class product(std::vector<size_t> primeIndices)
             std::cout << "i: " << i << std::endl;
             break;
         }
-        mpz_class tmp(std::to_string(primeList.at(i)));
-        p *= tmp;
+        p *= primeList.at(i);
     }
     return p;
 }
@@ -58,8 +60,7 @@ mpz_class leastPrimeProduct(int n)
     mpz_class p = 1;
     for (int i = 0; i < n; i++)
     {
-        mpz_class tmp(std::to_string(primeList.at(i)));
-        p *= tmp;
+        p *= primeList.at(i);
     }
     return p;
 }
@@ -88,8 +89,7 @@ mpz_class NtermRecursive(mpz_class l, std::vector<size_t> primeIndices, int powe
         while (1)
         {
             primeIndices[i] += 1;
-            mpz_class tmp(std::to_string(primeList[primeIndices[i]]));
-            if (tmp > (l / leastPrimeProduct(term - 1)))
+            if (primeList[primeIndices[i]] > (l / leastPrimeProduct(term - 1)))
                 break;
 
             sum += NtermRecursive(l, primeIndices, power, term);
@@ -120,6 +120,7 @@ void Nterm(mpz_class l, int power, int term, mpz_class* p_ret)
 {
     std::vector<size_t> primeIndices(term, -1);
     *p_ret = NtermRecursive(l, primeIndices, power, term);
+    std::cout << "Term " << term << " done." << std::endl;
 }
 
 
@@ -211,6 +212,7 @@ int main()
 
     std::chrono::time_point<std::chrono::steady_clock> start = std::chrono::steady_clock::now();
     mpf_class result = NPioverL(L_, 2);
+    cout << endl;
     cout << "result: " << std::setprecision(15) << result << endl;
 
     std::chrono::time_point<std::chrono::steady_clock> end = std::chrono::steady_clock::now();
@@ -221,7 +223,8 @@ int main()
 
 
 
-      
+    
+    system("pause");
     return 0;
 
 
